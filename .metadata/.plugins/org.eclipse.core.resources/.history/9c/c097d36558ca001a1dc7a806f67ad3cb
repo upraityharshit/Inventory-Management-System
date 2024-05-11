@@ -1,0 +1,130 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.awt.Font;
+import java.awt.Color;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.ImageIcon;
+import javax.swing.Box;
+import javax.swing.border.LineBorder;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
+import java.awt.Component;
+import javax.swing.border.BevelBorder;
+
+
+public class LoginPage {
+
+	private JFrame frame;
+	private JTextField textField;
+	private JPasswordField passwordField;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					LoginPage window = new LoginPage();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public LoginPage() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.getContentPane().setBackground(Color.GRAY);
+		frame.setBounds(100, 100, 774, 481);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblLoginPanel = new JLabel("Login Panel");
+		lblLoginPanel.setBounds(87, 122, 194, 50);
+		lblLoginPanel.setForeground(new Color(0, 0, 0));
+		lblLoginPanel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 35));
+		frame.getContentPane().add(lblLoginPanel);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(75, 170, 206, 2);
+		frame.getContentPane().add(separator);
+		
+		JLabel Username = new JLabel("Username :");
+		Username.setForeground(new Color(255, 215, 0));
+		Username.setBounds(45, 201, 101, 23);
+		Username.setFont(new Font("Tahoma", Font.BOLD, 16));
+		frame.getContentPane().add(Username);
+		
+		JLabel lblPassword = new JLabel("Password :");
+		lblPassword.setForeground(new Color(255, 215, 0));
+		lblPassword.setBounds(45, 247, 101, 23);
+		lblPassword.setFont(new Font("Tahoma", Font.BOLD, 16));
+		frame.getContentPane().add(lblPassword);
+		
+		textField = new JTextField();
+		textField.setBounds(156, 199, 158, 30);
+		frame.getContentPane().add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setBounds(395, 34, 330, 408);
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Harshit Upraity\\Desktop\\fi.png"));
+		frame.getContentPane().add(lblNewLabel);
+		
+		JButton btnNewButton = new JButton("LOGIN");
+		btnNewButton.setFont(new Font("Algerian", Font.PLAIN, 17));
+		btnNewButton.setBounds(45, 305, 113, 30);
+		frame.getContentPane().add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Sign UP");
+		btnNewButton_1.setFont(new Font("Algerian", Font.PLAIN, 17));
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnNewButton_1.setBounds(179, 305, 113, 30);
+		frame.getContentPane().add(btnNewButton_1);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(156, 245, 158, 30);
+		frame.getContentPane().add(passwordField);
+		
+		JButton btnForgetPassword = new JButton("Forget Password");
+		btnForgetPassword.setBounds(100, 356, 142, 23);
+		frame.getContentPane().add(btnForgetPassword);
+		
+		JLabel lblBillingSoftwareFor = new JLabel("Billing Software for You");
+		lblBillingSoftwareFor.setBackground(new Color(0, 0, 0));
+		lblBillingSoftwareFor.setForeground(new Color(255, 182, 193));
+		lblBillingSoftwareFor.setFont(new Font("Algerian", Font.ITALIC, 30));
+		lblBillingSoftwareFor.setBounds(78, 11, 417, 50);
+		frame.getContentPane().add(lblBillingSoftwareFor);
+		
+		Box horizontalBox = Box.createHorizontalBox();
+		horizontalBox.setBounds(10, 120, 349, 284);
+		horizontalBox.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
+		frame.getContentPane().add(horizontalBox);
+		
+		Box horizontalBox_1 = Box.createHorizontalBox();
+		horizontalBox_1.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		horizontalBox_1.setBounds(75, 55, 412, 6);
+		frame.getContentPane().add(horizontalBox_1);
+	}
+}

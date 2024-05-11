@@ -1,0 +1,1991 @@
+import java.awt.*;
+import java.awt.print.*;
+
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.sql.*;
+import java.text.DecimalFormat;
+import java.util.Calendar;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.ImageIcon;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.Box;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.JTextPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.JScrollPane;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.border.TitledBorder;
+import javax.swing.UIManager;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.SwingConstants;
+import javax.swing.border.MatteBorder;
+import javax.swing.JTable;
+import javax.swing.JRadioButton;
+
+import messageSend.ByEmail;
+import net.proteanit.sql.DbUtils;
+
+import javax.swing.table.DefaultTableModel;
+
+
+public class StockPage {
+
+	public JFrame frame;
+	JLayeredPane layeredPane;
+	private JTextField textField_2;
+	private JTextField textField_5;
+	private JTextArea textArea,textArea_1,textArea_2,textArea_3,textArea_4 ; 
+	private JTextPane textPane;
+	JPanel panel_1;
+	private JTextField txtIncludeAllTaxes;
+	private JLabel Price,lblQuantity_1, invoice,date, cusname, cusphone;
+	private JComboBox comboBox,comboBox_1,quickshow,comboBox_2,comboBox_3,comboBox_4;
+	float totalprice;
+	int totalquantity,totalgst,numto=0,disc=0;
+	private JSpinner spinner_1;
+	private JTextField cusnamefield;
+	private JTextField cusphonefield;
+	private JTable table;
+	String whr="date";
+	
+	JRadioButton rbitemname,rbbrandname,rbDate,rb1item,rb1brand,rb1quantity;
+	ButtonGroup bg,bg1;
+	private JTable table_1;
+	private JTable table_2;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JTable table_3;
+	private JTable table_4;
+	private JTextField textField;
+	private JTextField textField_1;
+	
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					StockPage window = new StockPage();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public void switchpanel(JPanel panel){
+		layeredPane.removeAll();
+		layeredPane.add(panel);
+		layeredPane.repaint();
+		layeredPane.revalidate();
+	}
+	
+	public StockPage() {
+		initialize();
+	}
+
+	private void initialize() {
+		frame = new JFrame();
+		frame.setResizable(false);
+		frame.getContentPane().setBackground(new Color(128, 128, 128));
+		frame.setTitle("Stock Control Panel");
+		frame.setBounds(-8, 1, 1400, 740);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		layeredPane = new JLayeredPane();
+		layeredPane.setBorder(new TitledBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(240, 240, 240), new Color(255, 255, 255), new Color(105, 105, 105), new Color(160, 160, 160)), new LineBorder(new Color(180, 180, 180), 5)), "HOME TECH DESIGN", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 255, 255)));
+		layeredPane.setBounds(0, 94, 1370, 607);
+		frame.getContentPane().add(layeredPane);
+		layeredPane.setLayout(new CardLayout(0, 0));
+		
+		JPanel panel = new JPanel();
+		layeredPane.add(panel, "name_84013684881100");
+		panel.setLayout(null);
+		
+		JSeparator separator_3 = new JSeparator();
+		separator_3.setBackground(new Color(255, 255, 240));
+		separator_3.setBounds(470, 249, 490, 12);
+		panel.add(separator_3);
+		
+		JLabel lblNewLabel_6 = new JLabel("Welcome TO Sports HUB");
+		lblNewLabel_6.setFont(new Font("Algerian", Font.PLAIN, 60));
+		lblNewLabel_6.setForeground(new Color(250, 240, 230));
+		lblNewLabel_6.setBounds(353, 176, 735, 80);
+		panel.add(lblNewLabel_6);
+		
+		JLabel lblAllSportsWear = new JLabel("{ All Sports Wear and Equipment }");
+		lblAllSportsWear.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+		lblAllSportsWear.setForeground(new Color(255, 255, 255));
+		lblAllSportsWear.setBounds(499, 257, 471, 36);
+		panel.add(lblAllSportsWear);
+		
+		JLabel lblNewLabel_3 = new JLabel("New label");
+		lblNewLabel_3.setIcon(new ImageIcon(StockPage.class.getResource("/img/background_20.wide.jpg")));
+		lblNewLabel_3.setBounds(0, 0, 1358, 580);
+		panel.add(lblNewLabel_3);
+		
+		/*
+		JLabel lblQuickShow = new JLabel("Quick View");
+		lblQuickShow.setForeground(new Color(128, 0, 0));
+		lblQuickShow.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+		lblQuickShow.setBounds(128, 90, 95, 25);
+		panel.add(lblQuickShow);
+		
+		quickshow = new JComboBox();
+		quickshow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (quickshow.getSelectedIndex()!=0) {	          
+					
+				}
+			}
+		});		quickshow.setBounds(291, 90, 164, 25);
+		panel.add(quickshow);
+		quickshow.addItem("Today");
+		quickshow.addItem("Weekly");
+		quickshow.addItem("Monthly");
+		quickshow.addItem("Yearly");
+		
+		JLabel lblGrossSale = new JLabel("Gross Sale");
+		lblGrossSale.setForeground(Color.RED);
+		lblGrossSale.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblGrossSale.setBounds(128, 144, 76, 25);
+		panel.add(lblGrossSale);
+		
+		JLabel lblAmountReceived = new JLabel("Amount Received");
+		lblAmountReceived.setForeground(new Color(0, 0, 255));
+		lblAmountReceived.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblAmountReceived.setBounds(225, 144, 123, 25);
+		panel.add(lblAmountReceived);
+		
+		JLabel lblAmountDue = new JLabel("Amount Due");
+		lblAmountDue.setForeground(new Color(128, 0, 128));
+		lblAmountDue.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblAmountDue.setBounds(369, 144, 103, 25);
+		panel.add(lblAmountDue);
+		
+		JLabel lblRs = new JLabel("Rs.");
+		lblRs.setBounds(128, 177, 21, 19);
+		panel.add(lblRs);
+		
+		JLabel label_1 = new JLabel("Rs.");
+		label_1.setBounds(233, 177, 21, 19);
+		panel.add(label_1);
+		
+		JLabel label_2 = new JLabel("Rs.");
+		label_2.setBounds(366, 177, 21, 19);
+		panel.add(label_2);
+		
+		JLabel grosssale = new JLabel("100000");
+		grosssale.setBounds(149, 177, 66, 16);
+		panel.add(grosssale);
+		
+		JLabel amountreceived = new JLabel("100000");
+		amountreceived.setBounds(257, 177, 85, 16);
+		panel.add(amountreceived);
+		
+		JLabel amountdue = new JLabel("100000");
+		amountdue.setBounds(389, 177, 85, 16);
+		panel.add(amountdue);
+		
+		JSeparator separator_3 = new JSeparator();
+		separator_3.setBounds(128, 130, 331, 4);
+		panel.add(separator_3);
+		
+		Box horizontalBox_6 = Box.createHorizontalBox();
+		horizontalBox_6.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
+		horizontalBox_6.setBounds(80, 61, 419, 169);
+		panel.add(horizontalBox_6);
+		
+		*/
+		JPanel panel1 = new JPanel();
+		layeredPane.add(panel1, "name_82436627474300");
+		panel1.setLayout(null);
+		
+		JLabel lblPanel = new JLabel("Search By :");
+		lblPanel.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		lblPanel.setBounds(10, 16, 101, 36);
+		panel1.add(lblPanel);
+		
+		bg=new ButtonGroup();
+		
+		rbitemname = new JRadioButton("Item Name");
+		rbitemname.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					comboBox_2.removeAllItems();
+					whr="itemname";
+					
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select DISTINCT itemname from itempurchase";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					while(rs.next()){
+						comboBox_2.addItem(rs.getString(1));
+					}
+					con.close();
+				}
+				catch(Exception e){}
+			}
+		});
+		rbitemname.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		rbitemname.setBounds(120, 23, 101, 23);
+		panel1.add(rbitemname);
+		bg.add(rbitemname);
+		
+		rbbrandname = new JRadioButton("Brand Name");
+		rbbrandname.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					comboBox_2.removeAllItems();
+					whr="brandname";
+					
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select DISTINCT brandname from itempurchase";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					while(rs.next()){
+						comboBox_2.addItem(rs.getString(1));
+					}
+					con.close();
+				}
+				catch(Exception e){}
+			}
+		});
+		rbbrandname.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		rbbrandname.setBounds(223, 23, 109, 23);
+		panel1.add(rbbrandname);
+		bg.add(rbbrandname);
+		
+		rbDate = new JRadioButton("Date");
+		rbDate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					comboBox_2.removeAllItems();
+					whr="date";
+					
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select DISTINCT date from itempurchase";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					while(rs.next()){
+						comboBox_2.addItem(rs.getString(1));
+					}
+					con.close();
+				}
+				catch(Exception e){}
+			}
+		});
+		rbDate.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		rbDate.setBounds(334, 23, 66, 23);
+		panel1.add(rbDate);
+		bg.add(rbDate);
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(0, 73, 1348, 507);
+		panel1.add(scrollPane_2);
+		
+		table = new JTable();
+		table.setBorder(new LineBorder(new Color(0, 0, 0)));
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+			}
+		));
+		scrollPane_2.setViewportView(table);
+		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(whr.equalsIgnoreCase("itemname")){
+					try{
+						Connection con;
+						PreparedStatement ps;
+						ResultSet rs;
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+						String str="select * from itempurchase where itemname=?";
+						ps=con.prepareStatement(str);
+						ps.setString(1, comboBox_2.getSelectedItem().toString());
+						rs=ps.executeQuery();
+						table.setModel(DbUtils.resultSetToTableModel(rs));
+						con.close();
+					}
+					catch(Exception e){
+						JOptionPane.showMessageDialog(frame, e.toString());
+					}
+				}
+				else if(whr.equalsIgnoreCase("brandname")){
+					try{
+						Connection con;
+						PreparedStatement ps;
+						ResultSet rs;
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+						String str="select * from itempurchase where brandname=?";
+						ps=con.prepareStatement(str);
+						ps.setString(1, comboBox_2.getSelectedItem().toString());
+						rs=ps.executeQuery();
+						table.setModel(DbUtils.resultSetToTableModel(rs));
+						con.close();
+					}
+					catch(Exception e){
+						JOptionPane.showMessageDialog(frame, e.toString());
+					}
+				}
+				else if(whr.equalsIgnoreCase("date")){
+					try{
+						Connection con;
+						PreparedStatement ps;
+						ResultSet rs;
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+						String str="select * from itempurchase where date=? order by date DESC";
+						ps=con.prepareStatement(str);
+						ps.setString(1, comboBox_2.getSelectedItem().toString());
+						rs=ps.executeQuery();
+						table.setModel(DbUtils.resultSetToTableModel(rs));
+						con.close();
+					}
+					catch(Exception e){
+						JOptionPane.showMessageDialog(frame, e.toString());
+					}
+				}
+			}
+		});
+		
+		comboBox_2 = new JComboBox();
+		comboBox_2.setBounds(422, 16, 201, 36);
+		panel1.add(comboBox_2);
+		
+		JLabel lblItemPurchaseHistory = new JLabel("Item Purchase History");
+		lblItemPurchaseHistory.setForeground(Color.BLUE);
+		lblItemPurchaseHistory.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+		lblItemPurchaseHistory.setBounds(1057, 11, 281, 36);
+		panel1.add(lblItemPurchaseHistory);
+		btnSearch.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		btnSearch.setBounds(639, 21, 89, 23);
+		panel1.add(btnSearch);
+		
+		JSeparator separator_8 = new JSeparator();
+		separator_8.setBounds(1052, 57, 275, 2);
+		panel1.add(separator_8);
+		
+		JPanel panel2 = new JPanel();
+		layeredPane.add(panel2, "name_82443075050800");
+		panel2.setLayout(null);
+		
+		JLabel label = new JLabel("Search By :");
+		label.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		label.setBounds(10, 12, 101, 36);
+		panel2.add(label);
+		
+		bg1=new ButtonGroup();
+		
+		rb1item = new JRadioButton("Item Name");
+		rb1item.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					comboBox_3.removeAllItems();
+					whr="itemname";
+					
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select DISTINCT itemname from item";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					while(rs.next()){
+						comboBox_3.addItem(rs.getString(1));
+					}
+					con.close();
+				}
+				catch(Exception e){}
+			}
+		});
+		rb1item.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		rb1item.setBounds(120, 21, 101, 23);
+		panel2.add(rb1item);
+		bg1.add(rb1item);
+		
+		rb1brand = new JRadioButton("Brand Name");
+		rb1brand.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					comboBox_3.removeAllItems();
+					whr="brandname";
+					
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select DISTINCT brandname from itembrand";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					while(rs.next()){
+						comboBox_3.addItem(rs.getString(1));
+					}
+					con.close();
+				}
+				catch(Exception e){}
+			}
+		});
+		rb1brand.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		rb1brand.setBounds(223, 21, 109, 23);
+		panel2.add(rb1brand);
+		bg1.add(rb1brand);
+		
+		rb1quantity = new JRadioButton("Quantity");
+		rb1quantity.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				whr="quantity";
+				comboBox_3.removeAllItems();
+				comboBox_3.addItem("Less Than <5");
+				comboBox_3.addItem("Less Than <10");
+				comboBox_3.addItem("Less Than <15");
+				comboBox_3.addItem("Less Than <20");
+				comboBox_3.addItem("Less Than <25");
+				comboBox_3.addItem("Less Than <30");
+				comboBox_3.addItem("Less Than <35");
+				comboBox_3.addItem("Less Than <40");
+				comboBox_3.addItem("Less Than <45");
+				comboBox_3.addItem("Less Than <50");
+				comboBox_3.addItem("Less Than <60");
+				comboBox_3.addItem("Less Than <70");
+				comboBox_3.addItem("Less Than <80");
+				comboBox_3.addItem("Less Than <90");
+				comboBox_3.addItem("Less Than <100");
+				comboBox_3.addItem("Less Than <200");
+				comboBox_3.addItem("Less Than <300");
+				comboBox_3.addItem("Less Than <400");
+				comboBox_3.addItem("Less Than <500");
+				comboBox_3.addItem("Less Than <1000");
+				comboBox_3.addItem("Less Than <1500");
+				comboBox_3.addItem("Less Than <2000");
+			}
+		});
+		rb1quantity.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		rb1quantity.setBounds(334, 21, 101, 23);
+		panel2.add(rb1quantity);
+		bg1.add(rb1quantity);
+		
+		comboBox_3 = new JComboBox();
+		comboBox_3.setBounds(454, 14, 201, 36);
+		panel2.add(comboBox_3);
+		
+		JLabel lblCurrentItemStock = new JLabel("Current Item Stock");
+		lblCurrentItemStock.setForeground(Color.BLUE);
+		lblCurrentItemStock.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+		lblCurrentItemStock.setBounds(1057, 12, 281, 36);
+		panel2.add(lblCurrentItemStock);
+		
+		JButton button = new JButton("Search");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(whr.equalsIgnoreCase("itemname")){
+					try{
+						Connection con;
+						PreparedStatement ps;
+						ResultSet rs;
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+						String str="select * from item where itemname=?";
+						ps=con.prepareStatement(str);
+						ps.setString(1, comboBox_3.getSelectedItem().toString());
+						rs=ps.executeQuery();
+						table_1.setModel(DbUtils.resultSetToTableModel(rs));
+						con.close();
+					}
+					catch(Exception e){
+						JOptionPane.showMessageDialog(frame, e.toString());
+					}
+				}
+				else if(whr.equalsIgnoreCase("brandname")){
+					try{
+						Connection con;
+						PreparedStatement ps;
+						ResultSet rs;
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+						String str="select * from item where brandname=?";
+						ps=con.prepareStatement(str);
+						ps.setString(1, comboBox_3.getSelectedItem().toString());
+						rs=ps.executeQuery();
+						table_1.setModel(DbUtils.resultSetToTableModel(rs));
+						con.close();
+					}
+					catch(Exception e){
+						JOptionPane.showMessageDialog(frame, e.toString());
+					}
+				}
+				else if(whr.equalsIgnoreCase("quantity")){
+					try{
+						Connection con;
+						PreparedStatement ps;
+						ResultSet rs;
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+						
+						String qunt=comboBox_3.getSelectedItem().toString();
+						int qun1= Integer.parseInt(qunt.substring(qunt.indexOf("<")+1));
+	
+						String str="select * from item where itemquantity<=?";
+						ps=con.prepareStatement(str);
+						ps.setInt(1, qun1);
+						rs=ps.executeQuery();
+						table_1.setModel(DbUtils.resultSetToTableModel(rs));
+						con.close();
+					}
+					catch(Exception e){
+						JOptionPane.showMessageDialog(frame, e.toString());
+					}
+				}
+			
+			}
+		});
+		button.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		button.setBounds(681, 20, 89, 23);
+		panel2.add(button);
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setBounds(0, 67, 1348, 513);
+		panel2.add(scrollPane_3);
+		
+		table_1 = new JTable();
+		scrollPane_3.setViewportView(table_1);
+		
+		JSeparator separator_9 = new JSeparator();
+		separator_9.setBounds(1057, 53, 237, 8);
+		panel2.add(separator_9);
+		
+		JPanel panel3 = new JPanel();
+		panel3.setBackground(new Color(255, 228, 181));
+		layeredPane.add(panel3, "name_82447065160300");
+		panel3.setLayout(null);
+		
+		
+		JButton btnPrint = new JButton("(Sell / Print / Save) Bill ");
+		btnPrint.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		btnPrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			int a=JOptionPane.showConfirmDialog(frame, "If you Want to Print or Save It to PDF. Press Ok Button, If Not Press NO");
+				if(a==0){
+					PrinterJob job=PrinterJob.getPrinterJob();
+					job.setJobName("Print Data");
+					
+					job.setPrintable(new Printable(){
+						public int print(Graphics pg,PageFormat pf,int pageNum){
+								pf.setOrientation(PageFormat.LANDSCAPE);
+							if(pageNum>0)
+								return Printable.NO_SUCH_PAGE;
+						
+						
+							java.awt.Graphics2D g2=(java.awt.Graphics2D)pg;
+							g2.translate(pf.getImageableX(),pf.getImageableY());
+							g2.scale(1.28,1.42);
+							
+							panel_1.paint(g2);
+							
+							return Printable.PAGE_EXISTS;
+						}
+						
+					});
+					
+						boolean ok=job.printDialog();
+						if(ok){
+							try{
+								job.print();
+							}
+							catch(PrinterException es){
+								JOptionPane.showMessageDialog(panel3, "Connection Problem in Printer");
+							}
+							catch(Exception es){
+								JOptionPane.showMessageDialog(panel3, "Something went Wrong....");
+							}
+						}
+					}
+				
+				textArea=textArea_2;
+				textArea_1=textArea_3;
+				disc=(int) spinner_1.getValue();
+				String dat=date.getText().toString();
+				Connection con;
+				PreparedStatement ps,ps1,ps2;
+				try{
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select * from saleitem";
+					ps=con.prepareStatement(str);
+					ResultSet rs=ps.executeQuery();
+					while(rs.next()){
+						try{
+							String str2="update item set itemquantity=itemquantity-? where itemname=? and brandname=?";
+							ps2=con.prepareStatement(str2);
+							ps2.setInt(1, totalquantity);
+							ps2.setString(2, rs.getString(1));
+							ps2.setString(3, rs.getString(2));
+							ps2.executeUpdate();
+							
+							String str1="insert into invoice values(invoiceid,?,?,?,?,?,?,?,?,?)";
+							ps1=con.prepareStatement(str1);
+							ps1.setString(1, textArea.getText().toString());
+							ps1.setString(2, textArea_1.getText().toString());
+							ps1.setInt(3, totalquantity);
+							ps1.setInt(4, totalgst);
+							ps1.setInt(5, disc);
+							ps1.setDouble(6, totalprice);
+							ps1.setString(7, cusname.getText().toString());
+							ps1.setString(8, cusphone.getText().toString());
+							ps1.setString(9, dat);
+							ps1.executeUpdate();
+						}
+						catch(SQLException ed){
+							JOptionPane.showMessageDialog(frame, "Item Quantity Is greater to our Stock\nPlease Check Stock First");
+						}
+					}
+					String last="delete from saleitem";
+					ps2=con.prepareStatement(last);
+					ps2.executeUpdate();
+					
+					JOptionPane.showMessageDialog(frame, "Stock Updated...");
+				con.close();
+				}
+				catch(Exception es){
+					JOptionPane.showMessageDialog(frame, es.toString());
+				}
+				
+			}
+		});
+		btnPrint.setBounds(586, 493, 166, 44);
+		panel3.add(btnPrint);
+		
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setBounds(434, 52, 227, 7);
+		panel3.add(separator_2);
+		
+		JLabel lblItemName = new JLabel("Item's Name      :");
+		lblItemName.setFont(new Font("Times New Roman", Font.ITALIC, 18));
+		lblItemName.setBounds(113, 255, 131, 34);
+		panel3.add(lblItemName);
+		
+		JLabel lblTotal = new JLabel("Total Price                :");
+		lblTotal.setFont(new Font("Times New Roman", Font.ITALIC, 18));
+		lblTotal.setBounds(162, 427, 176, 34);
+		panel3.add(lblTotal);
+		
+		JLabel lblBillPanel = new JLabel("Bill Panel");
+		lblBillPanel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 45));
+		lblBillPanel.setBounds(447, 7, 219, 34);
+		panel3.add(lblBillPanel);
+		
+		JLabel lblItemCategory = new JLabel("Select Item's   :");
+		lblItemCategory.setFont(new Font("Times New Roman", Font.ITALIC, 18));
+		lblItemCategory.setBounds(43, 150, 115, 34);
+		panel3.add(lblItemCategory);
+		
+		JLabel lblPrize = new JLabel("Prize / item   :");
+		lblPrize.setFont(new Font("Times New Roman", Font.ITALIC, 18));
+		lblPrize.setBounds(43, 195, 115, 34);
+		panel3.add(lblPrize);
+		
+		JLabel lblDiscount = new JLabel("Discount           :");
+		lblDiscount.setFont(new Font("Times New Roman", Font.ITALIC, 18));
+		lblDiscount.setBounds(113, 328, 141, 34);
+		panel3.add(lblDiscount);
+		
+		JLabel lblQuantity = new JLabel("Total Quantity           :");
+		lblQuantity.setFont(new Font("Times New Roman", Font.ITALIC, 18));
+		lblQuantity.setBounds(162, 389, 176, 34);
+		panel3.add(lblQuantity);
+		
+		JButton btnCalculate = new JButton("Calculate");
+		btnCalculate.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnCalculate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int dis=(int) spinner_1.getValue();
+				totalprice-=totalprice*((float)dis/100);
+				textField_2.setText(" "+totalquantity);
+				DecimalFormat df=new DecimalFormat("##.##");
+				textField_5.setText(" "+df.format(totalprice));
+			}
+		});
+		btnCalculate.setBounds(131, 493, 154, 44);
+		panel3.add(btnCalculate);
+		
+		textField_2 = new JTextField();
+		textField_2.setBounds(366, 389, 211, 34);
+		panel3.add(textField_2);
+		textField_2.setColumns(10);
+		
+		textField_5 = new JTextField();
+		textField_5.setBounds(366, 429, 213, 34);
+		panel3.add(textField_5);
+		textField_5.setColumns(10);
+		
+		JButton btnPreviewReceipt = new JButton("Preview Receipt");
+		btnPreviewReceipt.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnPreviewReceipt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			cusname.setText(" "+cusnamefield.getText().toString());
+			cusphone.setText(" "+cusphonefield.getText().toString());
+			textArea_4.setText(textPane.getText().toString());
+			textArea.setText(textArea_2.getText());
+			textArea_1.setText(textArea_3.getText());
+			Price.setText("Rs. "+totalprice);
+			}
+		});
+		btnPreviewReceipt.setBounds(348, 493, 176, 44);
+		panel3.add(btnPreviewReceipt);
+		
+		panel_1 = new JPanel();
+		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_1.setBackground(new Color(255, 255, 255));
+		panel_1.setBounds(857, 0, 481, 580);
+		panel3.add(panel_1);
+		panel_1.setLayout(null);
+		
+		JLabel lblInvoice = new JLabel("INVOICE");
+		lblInvoice.setFont(new Font("Castellar", Font.PLAIN, 30));
+		lblInvoice.setBounds(294, 31, 156, 48);
+		panel_1.add(lblInvoice);
+		
+		Box horizontalBox = Box.createHorizontalBox();
+		horizontalBox.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
+		horizontalBox.setBounds(283, 31, 166, 48);
+		panel_1.add(horizontalBox);
+		
+		JLabel lblNewLabel_2 = new JLabel("SPORTS HUB");
+		lblNewLabel_2.setFont(new Font("Times New Roman", Font.PLAIN, 23));
+		lblNewLabel_2.setBounds(23, 20, 148, 25);
+		panel_1.add(lblNewLabel_2);
+		
+		JTextPane txtpnAddress = new JTextPane();
+		txtpnAddress.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtpnAddress.setText("Naulakha, Sadar bazar,\r\nAgra Cantt, Agra, U.P");
+		txtpnAddress.setBounds(23, 43, 148, 41);
+		panel_1.add(txtpnAddress);
+		
+		JLabel lblDate = new JLabel("Date       :");
+		lblDate.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblDate.setBounds(294, 117, 64, 20);
+		panel_1.add(lblDate);
+		
+		invoice = new JLabel("New label");
+		invoice.setBounds(368, 148, 68, 14);
+		panel_1.add(invoice);
+		addinvoiceid();
+		
+		date = new JLabel("20/07/2020");
+		date.setBounds(368, 120, 87, 16);
+		panel_1.add(date);
+		
+		Calendar cal=Calendar.getInstance();
+		int dat=cal.get(Calendar.DATE);
+		int mon=cal.get(Calendar.MONTH)+1;
+		int yr=cal.get(Calendar.YEAR);
+		date.setText(dat+"-"+mon+"-"+yr);
+		
+		JLabel Invoice_1 = new JLabel("Invoice #   :");
+		Invoice_1.setBounds(294, 148, 68, 14);
+		panel_1.add(Invoice_1);
+		
+		Box verticalBox = Box.createVerticalBox();
+		verticalBox.setBorder(new LineBorder(new Color(0, 0, 0)));
+		verticalBox.setBounds(37, 191, 416, 27);
+		panel_1.add(verticalBox);
+		
+		JLabel lblAmount = new JLabel("AMOUNT");
+		lblAmount.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblAmount.setBounds(345, 195, 75, 20);
+		panel_1.add(lblAmount);
+		
+		JLabel lblDescription = new JLabel("Description");
+		lblDescription.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblDescription.setBounds(117, 195, 87, 20);
+		panel_1.add(lblDescription);
+		
+		JLabel lblTotal_1 = new JLabel("Total :");
+		lblTotal_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblTotal_1.setBounds(250, 487, 64, 20);
+		panel_1.add(lblTotal_1);
+		
+		textArea = new JTextArea();
+		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		textArea.setBounds(47, 226, 183, 248);
+		panel_1.add(textArea);
+		
+		textArea_1 = new JTextArea();
+		textArea_1.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		textArea_1.setBounds(324, 226, 126, 248);
+		panel_1.add(textArea_1);
+		
+		Price = new JLabel("Price");
+		Price.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		Price.setBounds(324, 487, 128, 23);
+		panel_1.add(Price);
+		
+		Box horizontalBox_1 = Box.createHorizontalBox();
+		horizontalBox_1.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		horizontalBox_1.setBounds(313, 191, 140, 324);
+		panel_1.add(horizontalBox_1);
+		
+		txtIncludeAllTaxes = new JTextField();
+		txtIncludeAllTaxes.setText("Include All Taxes. Sports Hub @2020");
+		txtIncludeAllTaxes.setBounds(5, 560, 470, 18);
+		panel_1.add(txtIncludeAllTaxes);
+		txtIncludeAllTaxes.setColumns(10);
+		
+		Box horizontalBox_8 = Box.createHorizontalBox();
+		horizontalBox_8.setBorder(new LineBorder(new Color(0, 0, 0)));
+		horizontalBox_8.setBounds(5, 6, 223, 84);
+		panel_1.add(horizontalBox_8);
+		
+		JLabel lblCustomerName_1 = new JLabel("Customer Name  :");
+		lblCustomerName_1.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		lblCustomerName_1.setBounds(23, 112, 114, 20);
+		panel_1.add(lblCustomerName_1);
+		
+		JLabel lblMobileNumber = new JLabel("Mobile Number   :");
+		lblMobileNumber.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		lblMobileNumber.setBounds(23, 142, 114, 20);
+		panel_1.add(lblMobileNumber);
+		
+		cusname = new JLabel("Example");
+		cusname.setBounds(136, 113, 134, 20);
+		panel_1.add(cusname);
+		
+		cusphone = new JLabel("Example");
+		cusphone.setBounds(136, 145, 134, 16);
+		panel_1.add(cusphone);
+		
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(5, 101, 466, 2);
+		panel_1.add(separator_1);
+		
+		JSeparator separator_4 = new JSeparator();
+		separator_4.setBounds(5, 178, 466, 2);
+		panel_1.add(separator_4);
+		
+		JSeparator separator_5 = new JSeparator();
+		separator_5.setOrientation(SwingConstants.VERTICAL);
+		separator_5.setBounds(275, 101, 8, 79);
+		panel_1.add(separator_5);
+		
+		JSeparator separator_6 = new JSeparator();
+		separator_6.setOrientation(SwingConstants.VERTICAL);
+		separator_6.setBounds(5, 100, 8, 80);
+		panel_1.add(separator_6);
+		
+		JSeparator separator_7 = new JSeparator();
+		separator_7.setOrientation(SwingConstants.VERTICAL);
+		separator_7.setBounds(470, 100, 8, 80);
+		panel_1.add(separator_7);
+		
+		JLabel lblSignature = new JLabel("Signature");
+		lblSignature.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		lblSignature.setBounds(140, 529, 64, 20);
+		panel_1.add(lblSignature);
+		
+		JSeparator separator_15 = new JSeparator();
+		separator_15.setBounds(17, 547, 120, 2);
+		panel_1.add(separator_15);
+		
+		textArea_4 = new JTextArea();
+		textArea_4.setBounds(228, 225, 83, 251);
+		panel_1.add(textArea_4);
+		
+		Box horizontalBox_2 = Box.createHorizontalBox();
+		horizontalBox_2.setBounds(37, 191, 416, 293);
+		panel_1.add(horizontalBox_2);
+		horizontalBox_2.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		
+		comboBox = new JComboBox();
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(comboBox.getSelectedIndex()!=0){
+					Connection con;
+					PreparedStatement ps;
+					try{
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+						String str="select * from item where itemname=? and brandname=?";
+						ps=con.prepareStatement(str);
+						ps.setString(1, comboBox.getSelectedItem().toString());
+						ps.setString(2, comboBox_1.getSelectedItem().toString());
+						ResultSet rs=ps.executeQuery();
+						while(rs.next()){
+							lblQuantity_1.setText("Quantity of this Item = "+rs.getInt(6));
+						}
+						con.close();
+					}
+					catch(Exception es){}
+					
+				}
+			}
+		});
+		comboBox.setBounds(168, 150, 150, 34);
+		panel3.add(comboBox);
+		comboBox.addItem("Select One");
+		
+		comboBox_1 = new JComboBox();
+		comboBox_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(comboBox_1.getSelectedIndex()!=0){
+					comboBox.removeAllItems();
+					comboBox.repaint();
+					comboBox.addItem("Select One");
+					additembrand(comboBox_1.getSelectedItem().toString());
+				}
+			}
+		});
+		comboBox_1.setBounds(168, 110, 151, 34);
+		panel3.add(comboBox_1);
+		comboBox_1.addItem("Select One");
+		
+		
+		JSpinner spinner = new JSpinner();
+		spinner.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		spinner.setBounds(332, 150, 46, 34);
+		panel3.add(spinner);
+		
+		JSpinner spinner_2 = new JSpinner();
+		spinner_2.setModel(new SpinnerNumberModel(new Float(0), null, null, new Float(1)));
+		spinner_2.setBounds(168, 195, 78, 29);
+		panel3.add(spinner_2);
+		
+		JLabel lblX = new JLabel("X");
+		lblX.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblX.setForeground(Color.DARK_GRAY);
+		lblX.setBounds(317, 149, 21, 34);
+		panel3.add(lblX);
+		
+		spinner_1 = new JSpinner();
+		spinner_1.setBounds(263, 333, 115, 29);
+		panel3.add(spinner_1);
+		
+		Box horizontalBox_3 = Box.createHorizontalBox();
+		horizontalBox_3.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		horizontalBox_3.setBounds(131, 373, 487, 105);
+		panel3.add(horizontalBox_3);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(254, 255, 153, 71);
+		panel3.add(scrollPane);
+		
+		textArea_2 = new JTextArea();
+		scrollPane.setViewportView(textArea_2);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(411, 255, 98, 71);
+		panel3.add(scrollPane_1);
+		
+		textArea_3 = new JTextArea();
+		scrollPane_1.setViewportView(textArea_3);
+		
+		JScrollPane scrollPane_7 = new JScrollPane();
+		scrollPane_7.setBounds(511, 255, 104, 71);
+		panel3.add(scrollPane_7);
+		
+		textPane = new JTextPane();
+		scrollPane_7.setViewportView(textPane);
+		
+		Box horizontalBox_4 = Box.createHorizontalBox();
+		horizontalBox_4.setEnabled(false);
+		horizontalBox_4.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		horizontalBox_4.setBounds(100, 244, 548, 125);
+		panel3.add(horizontalBox_4);
+		
+		JLabel lblNewLabel_4 = new JLabel("Select Brand   :");
+		lblNewLabel_4.setFont(new Font("Times New Roman", Font.ITALIC, 18));
+		lblNewLabel_4.setBounds(43, 110, 115, 29);
+		panel3.add(lblNewLabel_4);
+		
+		JLabel lblNoOfItems = new JLabel("(No. Of Item's)");
+		lblNoOfItems.setBounds(385, 162, 90, 14);
+		panel3.add(lblNoOfItems);
+		
+		int dbqun;
+		JButton btnAdd = new JButton("ADD");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Connection con;
+				PreparedStatement ps,ps1,ps2;
+				String brand=comboBox_1.getSelectedItem().toString();
+				String item=comboBox.getSelectedItem().toString();
+				float price=(float)spinner_2.getValue();
+				int num=(int)spinner.getValue();
+				
+				try{
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select * from item where itemname=? and brandname=?";
+					ps=con.prepareStatement(str);
+					ps.setString(1, item);
+					ps.setString(2, brand);
+					ResultSet rs=ps.executeQuery();
+					if(rs.next()){
+						int gst=rs.getInt(7);
+						price+=(price*((float)gst/100));
+						totalgst+=gst;
+						totalprice+=price*num;
+						totalquantity+=num;
+						String rst=textArea_2.getText();
+						String pr=textArea_3.getText();
+						String gs=textPane.getText();
+						textArea_2.setText(" "+item+" * "+num+"\n"+rst);
+						float np=num*price;
+						DecimalFormat df=new DecimalFormat("##.##");
+						textArea_3.setText(" Rs."+df.format(np)+"\n"+pr);
+						textPane.setText(" @GST "+gst+"%\n"+gs);
+						comboBox.removeItem(item);
+						
+						String str1="select * from saleitem where itemname=? and brandname=?";
+						ps2=con.prepareStatement(str1);
+						ps2.setString(1, item);
+						ps2.setString(2, brand);
+						ResultSet rs1=ps2.executeQuery();
+						if(rs1.next()){
+							String sr="update saleitem set qun=qun+? where itemname=? and brandname=?";
+							ps1=con.prepareStatement(sr);
+							ps1.setInt(1,num);
+							ps1.setString(2, item);
+							ps1.setString(3, brand);
+							ps1.executeUpdate();
+						}
+						else{
+							String sr="insert into saleitem values(?,?,?)";
+							ps1=con.prepareStatement(sr);
+							ps1.setString(1, item);
+							ps1.setString(2, brand);
+							ps1.setInt(3, num);
+							ps1.executeUpdate();
+						}
+					}
+					con.close();
+				}
+				catch(Exception es){
+					JOptionPane.showMessageDialog(frame, es.toString()+" add");
+				}
+			}
+		});
+		btnAdd.setBounds(291, 198, 113, 31);
+		panel3.add(btnAdd);
+		
+		lblQuantity_1 = new JLabel("");
+		lblQuantity_1.setFont(new Font("Times New Roman", Font.PLAIN, 11));
+		lblQuantity_1.setBounds(329, 120, 146, 20);
+		panel3.add(lblQuantity_1);
+		
+		Box horizontalBox_5 = Box.createHorizontalBox();
+		horizontalBox_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+		horizontalBox_5.setBounds(10, 94, 471, 145);
+		panel3.add(horizontalBox_5);
+		
+		JButton btnReset = new JButton("RESET");
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				totalprice=0;
+				totalquantity=0;
+				totalgst=0;
+				textArea_2.setText("");
+				textField_2.setText("");
+				textField_5.setText("");
+				textArea_1.setText("");
+				textArea_3.setText("");
+				textArea_4.setText("");
+				textArea.setText("");
+				textPane.setText("");
+				Price.setText("");
+				comboBox.removeAllItems();
+				comboBox.addItem("Select One");
+				cusname.setText("");
+				cusnamefield.setText("");
+				cusname.setText("");
+				cusphonefield.setText("");
+				
+				try{
+					Connection con;
+					PreparedStatement ps;
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String last="delete from saleitem";
+					ps=con.prepareStatement(last);
+					ps.executeUpdate();
+					con.close();
+				}
+				catch(Exception es){}
+			}
+		});
+		btnReset.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnReset.setBounds(628, 429, 166, 30);
+		panel3.add(btnReset);
+		
+		JLabel lblCustomerName = new JLabel("Customer Name  :");
+		lblCustomerName.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblCustomerName.setBounds(514, 121, 122, 29);
+		panel3.add(lblCustomerName);
+		
+		cusnamefield = new JTextField();
+		cusnamefield.setBounds(646, 119, 176, 34);
+		panel3.add(cusnamefield);
+		cusnamefield.setColumns(10);
+		
+		JLabel lblPhoneNo = new JLabel("Phone No.            :");
+		lblPhoneNo.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblPhoneNo.setBounds(514, 179, 122, 34);
+		panel3.add(lblPhoneNo);
+		
+		cusphonefield = new JTextField();
+		cusphonefield.setBounds(646, 179, 176, 34);
+		panel3.add(cusphonefield);
+		cusphonefield.setColumns(10);
+		
+		Box horizontalBox_7 = Box.createHorizontalBox();
+		horizontalBox_7.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		horizontalBox_7.setBounds(491, 94, 348, 145);
+		panel3.add(horizontalBox_7);
+		
+		JPanel panel4 = new JPanel();
+		layeredPane.add(panel4, "name_28531958925900");
+		panel4.setLayout(null);
+		
+		JLabel lblSearchBillReceipt = new JLabel("Search Bill Receipt By :");
+		lblSearchBillReceipt.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		lblSearchBillReceipt.setBounds(10, 11, 194, 38);
+		panel4.add(lblSearchBillReceipt);
+		
+		JRadioButton rdbtnByInvoiceId = new JRadioButton("Invoice Id");
+		rdbtnByInvoiceId.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					comboBox_4.removeAllItems();
+					whr="invoiceid";
+					
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select invoiceid from invoice order by invoiceid DESC";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					while(rs.next()){
+						comboBox_4.addItem(rs.getString(1));
+					}
+					con.close();
+				}
+				catch(Exception es){}
+			}
+		});
+		buttonGroup.add(rdbtnByInvoiceId);
+		rdbtnByInvoiceId.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		rdbtnByInvoiceId.setBounds(210, 17, 88, 27);
+		panel4.add(rdbtnByInvoiceId);
+		
+		JRadioButton rdbtnByDate = new JRadioButton("Date");
+		rdbtnByDate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					comboBox_4.removeAllItems();
+					whr="date";
+					
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select dat from invoice order by dat DESC";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					while(rs.next()){
+						comboBox_4.addItem(rs.getString(1));
+					}
+					con.close();
+				}
+				catch(Exception es){}
+			}
+		});
+		buttonGroup.add(rdbtnByDate);
+		rdbtnByDate.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		rdbtnByDate.setBounds(300, 19, 58, 23);
+		panel4.add(rdbtnByDate);
+		
+		JRadioButton rdbtnByCustomerName = new JRadioButton("Customer Name");
+		rdbtnByCustomerName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					comboBox_4.removeAllItems();
+					whr="cusname";
+					
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select CustomerName from invoice";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					while(rs.next()){
+						comboBox_4.addItem(rs.getString(1));
+					}
+					con.close();
+				}
+				catch(Exception es){}
+			}
+		});
+		buttonGroup.add(rdbtnByCustomerName);
+		rdbtnByCustomerName.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		rdbtnByCustomerName.setBounds(361, 19, 117, 23);
+		panel4.add(rdbtnByCustomerName);
+		
+		JRadioButton rdbtnCustomerMobileNo = new JRadioButton("Customer Mobile No.");
+		rdbtnCustomerMobileNo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					comboBox_4.removeAllItems();
+					whr="cusmobile";
+					
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select CustomerMobileNo from invoice";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					while(rs.next()){
+						comboBox_4.addItem(rs.getString(1));
+					}
+					con.close();
+				}
+				catch(Exception es){}
+			}
+		});
+		buttonGroup.add(rdbtnCustomerMobileNo);
+		rdbtnCustomerMobileNo.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		rdbtnCustomerMobileNo.setBounds(483, 20, 155, 23);
+		panel4.add(rdbtnCustomerMobileNo);
+		
+		comboBox_4 = new JComboBox();
+		comboBox_4.setBounds(644, 17, 180, 30);
+		panel4.add(comboBox_4);
+		
+		JButton btnSearch_1 = new JButton("Search");
+		btnSearch_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(whr.equalsIgnoreCase("invoiceid")){
+					try{
+						Connection con;
+						PreparedStatement ps;
+						ResultSet rs;
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+						String str="select * from invoice where invoiceid=?";
+						ps=con.prepareStatement(str);
+						ps.setString(1, comboBox_4.getSelectedItem().toString());
+						rs=ps.executeQuery();
+						table_2.setModel(DbUtils.resultSetToTableModel(rs));
+						con.close();
+					}
+					catch(Exception es){
+						JOptionPane.showMessageDialog(frame, es.toString());
+					}
+				}
+				else if(whr.equalsIgnoreCase("date")){
+					try{
+						Connection con;
+						PreparedStatement ps;
+						ResultSet rs;
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+						String str="select * from invoice where dat=?";
+						ps=con.prepareStatement(str);
+						ps.setString(1, comboBox_4.getSelectedItem().toString());
+						rs=ps.executeQuery();
+						table_2.setModel(DbUtils.resultSetToTableModel(rs));
+						con.close();
+					}
+					catch(Exception es){
+						JOptionPane.showMessageDialog(frame, es.toString());
+					}
+				}
+				else if(whr.equalsIgnoreCase("cusname")){
+					try{
+						Connection con;
+						PreparedStatement ps;
+						ResultSet rs;
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+	
+						String str="select * from invoice where CustomerName=?";
+						ps=con.prepareStatement(str);
+						ps.setString(1, comboBox_4.getSelectedItem().toString());
+						rs=ps.executeQuery();
+						table_2.setModel(DbUtils.resultSetToTableModel(rs));
+						con.close();
+					}
+					catch(Exception es){
+						JOptionPane.showMessageDialog(frame, es.toString());
+					}
+				}
+				else if(whr.equalsIgnoreCase("cusmobile")){
+					try{
+						Connection con;
+						PreparedStatement ps;
+						ResultSet rs;
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+						
+						String str="select * from invoice where CustomerMobileNo=?";
+						ps=con.prepareStatement(str);
+						ps.setString(1, comboBox_4.getSelectedItem().toString());
+						rs=ps.executeQuery();
+						table_2.setModel(DbUtils.resultSetToTableModel(rs));
+						con.close();
+					}
+					catch(Exception es){
+						JOptionPane.showMessageDialog(frame, es.toString());
+					}
+				}
+			}
+		});
+		btnSearch_1.setBounds(835, 22, 75, 23);
+		panel4.add(btnSearch_1);
+		
+		JLabel lblBillReceipt = new JLabel("BILL");
+		lblBillReceipt.setForeground(Color.BLUE);
+		lblBillReceipt.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		lblBillReceipt.setBounds(1238, 11, 88, 44);
+		panel4.add(lblBillReceipt);
+		
+		JSeparator separator_10 = new JSeparator();
+		separator_10.setBounds(1226, 53, 100, 2);
+		panel4.add(separator_10);
+		
+		JScrollPane scrollPane_4 = new JScrollPane();
+		scrollPane_4.setBounds(0, 72, 1348, 508);
+		panel4.add(scrollPane_4);
+		
+		table_2 = new JTable();
+		scrollPane_4.setViewportView(table_2);
+		
+		JPanel panel5 = new JPanel();
+		panel5.setBackground(new Color(72, 209, 204));
+		layeredPane.add(panel5, "name_102475607398600");
+		panel5.setLayout(null);
+		
+		JLabel lblNewLabel_7 = new JLabel("Customer List");
+		lblNewLabel_7.setForeground(Color.RED);
+		lblNewLabel_7.setFont(new Font("Algerian", Font.PLAIN, 35));
+		lblNewLabel_7.setBounds(545, 11, 267, 43);
+		panel5.add(lblNewLabel_7);
+		
+		JSeparator separator_11 = new JSeparator();
+		separator_11.setForeground(Color.ORANGE);
+		separator_11.setBounds(535, 55, 278, 2);
+		panel5.add(separator_11);
+		
+		JScrollPane scrollPane_5 = new JScrollPane();
+		scrollPane_5.setBounds(1, 73, 1347, 507);
+		panel5.add(scrollPane_5);
+		
+		table_3 = new JTable();
+		scrollPane_5.setViewportView(table_3);
+		
+		JPanel panel6 = new JPanel();
+		panel6.setBackground(new Color(72, 209, 204));
+		layeredPane.add(panel6, "name_102527774129300");
+		panel6.setLayout(null);
+		
+		JLabel lblSupplierList = new JLabel("Supplier List");
+		lblSupplierList.setForeground(new Color(255, 0, 0));
+		lblSupplierList.setFont(new Font("Algerian", Font.PLAIN, 35));
+		lblSupplierList.setBounds(556, 13, 260, 43);
+		panel6.add(lblSupplierList);
+		
+		JSeparator separator_12 = new JSeparator();
+		separator_12.setForeground(Color.ORANGE);
+		separator_12.setBounds(551, 58, 250, 3);
+		panel6.add(separator_12);
+		
+		JScrollPane scrollPane_6 = new JScrollPane();
+		scrollPane_6.setBounds(1, 81, 1347, 498);
+		panel6.add(scrollPane_6);
+		
+		table_4 = new JTable();
+		scrollPane_6.setViewportView(table_4);
+		
+		JPanel SendMailPanel = new JPanel();
+		SendMailPanel.setBackground(new Color(255, 182, 193));
+		layeredPane.add(SendMailPanel, "name_82011291291800");
+		SendMailPanel.setLayout(null);
+		
+		JLabel lblNewLabel_8 = new JLabel("");
+		lblNewLabel_8.setIcon(new ImageIcon(StockPage.class.getResource("/img/Send-Email-Button-Transparent-PNG.png")));
+		lblNewLabel_8.setBounds(179, 0, 521, 86);
+		SendMailPanel.add(lblNewLabel_8);
+		
+		JLabel lblFrom = new JLabel("From    :");
+		lblFrom.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+		lblFrom.setBounds(201, 142, 99, 34);
+		SendMailPanel.add(lblFrom);
+		
+		JLabel lblNewLabel_9 = new JLabel("TO        :");
+		lblNewLabel_9.setFont(new Font("Times New Roman", Font.PLAIN, 23));
+		lblNewLabel_9.setBounds(200, 191, 99, 28);
+		SendMailPanel.add(lblNewLabel_9);
+		
+		JLabel lblHarshitwebdesigngmailcom = new JLabel("harshitwebdesign@gmail.com");
+		lblHarshitwebdesigngmailcom.setForeground(new Color(65, 105, 225));
+		lblHarshitwebdesigngmailcom.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		lblHarshitwebdesigngmailcom.setBounds(364, 142, 280, 34);
+		SendMailPanel.add(lblHarshitwebdesigngmailcom);
+		
+		textField = new JTextField();
+		textField.setBounds(363, 186, 281, 34);
+		SendMailPanel.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblSubject = new JLabel("Subject   :");
+		lblSubject.setFont(new Font("Times New Roman", Font.PLAIN, 21));
+		lblSubject.setBounds(200, 232, 113, 34);
+		SendMailPanel.add(lblSubject);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(363, 231, 280, 34);
+		SendMailPanel.add(textField_1);
+		textField_1.setColumns(10);
+		
+		JLabel lblBody = new JLabel("Body     :");
+		lblBody.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+		lblBody.setBounds(200, 283, 113, 34);
+		SendMailPanel.add(lblBody);
+		
+		JScrollPane scrollPane_8 = new JScrollPane();
+		scrollPane_8.setBounds(363, 283, 364, 140);
+		SendMailPanel.add(scrollPane_8);
+		
+		JTextArea textArea_5 = new JTextArea();
+		scrollPane_8.setViewportView(textArea_5);
+		
+		JButton btnSend = new JButton("Send");
+		btnSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+					ByEmail obj=new ByEmail();
+					String ope=obj.SendEmail(textField.getText().toString(),textField_1.getText().toString(),textArea_5.getText().toString());
+					if(ope.equalsIgnoreCase("ok"))
+						JOptionPane.showMessageDialog(frame, "Sent Sucessfully...");
+					else
+						JOptionPane.showMessageDialog(frame,"There Was Some Problem...\nCheck Your Internet Connection");
+			}
+		});
+		btnSend.setFont(new Font("Algerian", Font.PLAIN, 22));
+		btnSend.setBounds(233, 459, 136, 36);
+		SendMailPanel.add(btnSend);
+		
+		JButton btnReset_1 = new JButton("Reset");
+		btnReset_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				textField.setText("");
+				textField_1.setText("");
+				textArea_5.setText("");
+			}
+		});
+		btnReset_1.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+		btnReset_1.setBounds(423, 459, 136, 36);
+		SendMailPanel.add(btnReset_1);
+		
+		Box horizontalBox_6 = Box.createHorizontalBox();
+		horizontalBox_6.setBorder(new EtchedBorder(EtchedBorder.RAISED, new Color(255, 0, 0), new Color(0, 206, 209)));
+		horizontalBox_6.setBounds(125, 115, 663, 405);
+		SendMailPanel.add(horizontalBox_6);
+		
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setMargin(new Insets(4, 0, 0, 0));
+		menuBar.setBounds(0, 0, 1370, 31);
+		frame.getContentPane().add(menuBar);
+		
+		JMenu mnHome = new JMenu("Home");
+		menuBar.add(mnHome);
+		
+		JMenuItem mntmHome = new JMenuItem("Home");
+		mntmHome.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switchpanel(panel);
+			}
+		});
+		mnHome.add(mntmHome);
+		
+		JMenu mnItemCategory = new JMenu("Item Brand");
+		menuBar.add(mnItemCategory);
+		
+		JMenuItem mntmAddNewCategory = new JMenuItem("Add New Brand");
+		mntmAddNewCategory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				itemcategorypage window = new itemcategorypage("add");
+				window.itemcatframe.setVisible(true);
+				
+			}
+		});
+		mnItemCategory.add(mntmAddNewCategory);
+		
+		JMenuItem mntmDeleteCategory = new JMenuItem("Delete Brand");
+		mntmDeleteCategory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				itemcategorypage window = new itemcategorypage("delete");
+				window.itemcatframe.setVisible(true);
+			}
+		});
+		mnItemCategory.add(mntmDeleteCategory);
+		
+		JMenu mnItem = new JMenu("Item");
+		menuBar.add(mnItem);
+		
+		JMenuItem mntmAddNewItem = new JMenuItem("Add new Item");
+		mntmAddNewItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				itempage window = new itempage("add");
+				window.frame.setVisible(true);
+			}
+		});
+		mnItem.add(mntmAddNewItem);
+		
+		JMenuItem mntmUpdateItem = new JMenuItem("Update Item");
+		mntmUpdateItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				itempage window = new itempage("update");
+				window.frame.setVisible(true);
+			}
+		});
+		mnItem.add(mntmUpdateItem);
+		
+		JMenuItem mntmDeleteItem = new JMenuItem("Delete Item");
+		mntmDeleteItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				itempage window = new itempage("delete");
+				window.frame.setVisible(true);
+			}
+		});
+		mnItem.add(mntmDeleteItem);
+		
+		JMenu mnSupplier = new JMenu("Supplier");
+		menuBar.add(mnSupplier);
+		
+		JMenuItem mntmAdd = new JMenuItem("Add");
+		mntmAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				supplierpage window = new supplierpage("add");
+				window.frame.setVisible(true);
+			}
+		});
+		mnSupplier.add(mntmAdd);
+		
+		JMenuItem mntmUpdate = new JMenuItem("Update");
+		mntmUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				supplierpage window = new supplierpage("update");
+				window.frame.setVisible(true);
+			}
+		});
+		mnSupplier.add(mntmUpdate);
+		
+		JMenuItem mntmDelete = new JMenuItem("Delete");
+		mntmDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				supplierpage window = new supplierpage("delete");
+				window.frame.setVisible(true);
+			}
+		});
+		mnSupplier.add(mntmDelete);
+		
+		JMenu mnContact = new JMenu("Contact");
+		mnSupplier.add(mnContact);
+		
+		JMenuItem mntmViaEmail = new JMenuItem("Via Email");
+		mntmViaEmail.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//JOptionPane.showMessageDialog(frame, "This Feature Is Not Available Yet...Purcahse Full Version");
+				switchpanel(SendMailPanel);
+			}
+		});
+		mnContact.add(mntmViaEmail);
+		
+		JMenuItem mntmViaMessage = new JMenuItem("Via Message");
+		mntmViaMessage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//JOptionPane.showMessageDialog(frame, "This Feature Is Not Available Yet...Purcahse Full Version");
+				
+				
+			}
+		});
+		mnContact.add(mntmViaMessage);
+		
+		JMenu mnCustomer = new JMenu("Customer");
+		mnCustomer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				customerpage window = new customerpage("add");
+				window.frame.setVisible(true);
+			}
+		});
+		menuBar.add(mnCustomer);
+		
+		JMenuItem mntmAdd_1 = new JMenuItem("Add");
+		mntmAdd_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				customerpage window = new customerpage("add");
+				window.frame.setVisible(true);
+			}
+		});
+		mnCustomer.add(mntmAdd_1);
+		
+		JMenuItem mntmUpdate_1 = new JMenuItem("Update");
+		mntmUpdate_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				customerpage window = new customerpage("update");
+				window.frame.setVisible(true);
+			}
+		});
+		mnCustomer.add(mntmUpdate_1);
+		
+		JMenuItem mntmDelete_1 = new JMenuItem("Delete");
+		mntmDelete_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				customerpage window = new customerpage("delete");
+				window.frame.setVisible(true);
+			}
+		});
+		mnCustomer.add(mntmDelete_1);
+		
+		JMenu mnContact_1 = new JMenu("Contact");
+		mnCustomer.add(mnContact_1);
+		
+		JMenuItem mntmViaEmail_1 = new JMenuItem("Via Email");
+		mntmViaEmail_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//JOptionPane.showMessageDialog(frame, "This Feature Is Not Available Yet...Purcahse Full Version");
+				switchpanel(SendMailPanel);
+			}
+		});
+		mnContact_1.add(mntmViaEmail_1);
+		
+		JMenuItem mntmViaMessage_1 = new JMenuItem("Via Message");
+		mntmViaMessage_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(frame, "This Feature Is Not Available Yet...Purcahse Full Version");
+			}
+		});
+		mnContact_1.add(mntmViaMessage_1);
+		
+		JMenu mnFeatures = new JMenu("Search");
+		menuBar.add(mnFeatures);
+		
+		JMenuItem mntmPurchaseHistory = new JMenuItem("Item's Purchase History");
+		mntmPurchaseHistory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switchpanel(panel1);
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select * from itempurchase";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+					con.close();
+					
+				}
+				catch(Exception e){
+					JOptionPane.showMessageDialog(frame, e.toString());
+				}
+			}
+		});
+		mnFeatures.add(mntmPurchaseHistory);
+		
+		JMenuItem mntmCheckStock = new JMenuItem("Check Stock");
+		mntmCheckStock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switchpanel(panel2);
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select * from item";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					table_1.setModel(DbUtils.resultSetToTableModel(rs));
+					con.close();
+					
+				}
+				catch(Exception es){
+					JOptionPane.showMessageDialog(frame, es.toString());
+				}
+
+			}
+		});
+		mnFeatures.add(mntmCheckStock);
+		
+		JMenuItem mntmCheckBills = new JMenuItem("Check Bills");
+		mntmCheckBills.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switchpanel(panel4);
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select * from invoice";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					table_2.setModel(DbUtils.resultSetToTableModel(rs));
+					con.close();
+				}
+				catch(Exception es){
+					JOptionPane.showMessageDialog(frame, es.toString());
+				}
+			}
+		});
+		mnFeatures.add(mntmCheckBills);
+		
+		JMenuItem mntmAllCustomerList = new JMenuItem("All Customer List");
+		mntmAllCustomerList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switchpanel(panel5);
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select * from customer";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					table_3.setModel(DbUtils.resultSetToTableModel(rs));
+					con.close();
+				}
+				catch(Exception es){
+					JOptionPane.showMessageDialog(frame, es.toString());
+				}
+			}
+		});
+		mnFeatures.add(mntmAllCustomerList);
+		
+		JMenuItem mntmAllSupplierList = new JMenuItem("All Supplier List");
+		mntmAllSupplierList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switchpanel(panel6);
+				try{
+					Connection con;
+					PreparedStatement ps;
+					ResultSet rs;
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String str="select * from supplier";
+					ps=con.prepareStatement(str);
+					rs=ps.executeQuery();
+					table_4.setModel(DbUtils.resultSetToTableModel(rs));
+					con.close();
+				}
+				catch(Exception es){
+					JOptionPane.showMessageDialog(frame, es.toString());
+				}
+			}
+		});
+		mnFeatures.add(mntmAllSupplierList);
+		
+		JMenu mnGenerateBill = new JMenu("Invoice");
+		menuBar.add(mnGenerateBill);
+		
+		JMenuItem mntmGenerateBillReceipt = new JMenuItem("Generate Bill Receipt");
+		mntmGenerateBillReceipt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switchpanel(panel3);
+				addcomboBox_1();
+			}
+		});
+		mnGenerateBill.add(mntmGenerateBillReceipt);
+		
+		JMenu mnSetting = new JMenu("Setting");
+		menuBar.add(mnSetting);
+		
+		JMenuItem mntmChangePassword = new JMenuItem("Change Password");
+		mntmChangePassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(frame, "This Feature Is Not Available Yet...Purcahse Full Version");
+			}
+		});
+		mnSetting.add(mntmChangePassword);
+		
+		JMenuItem mntmLogOut = new JMenuItem("Log Out");
+		mntmLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginPage window = new LoginPage();
+				window.frmLoginPage.setVisible(true);
+				frame.dispose();
+			}
+		});
+		mnSetting.add(mntmLogOut);
+		
+		
+		JLabel lblNewLabel = new JLabel("Inventory Management System");
+		lblNewLabel.setForeground(new Color(0, 0, 139));
+		lblNewLabel.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+		lblNewLabel.setBounds(110, 42, 353, 41);
+		frame.getContentPane().add(lblNewLabel);
+		
+		JSeparator separator = new JSeparator();
+		separator.setForeground(new Color(210, 105, 30));
+		separator.setBounds(110, 82, 320, 8);
+		frame.getContentPane().add(separator);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.setIcon(new ImageIcon(StockPage.class.getResource("/img/stock-management-words-next-to-boxes-inventory-white-background-31736981.jpg")));
+		lblNewLabel_1.setBounds(0, 33, 100, 63);
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_5 = new JLabel("New label");
+		lblNewLabel_5.setIcon(new ImageIcon(StockPage.class.getResource("/img/MyLOgo1.png")));
+		lblNewLabel_5.setBounds(1188, 32, 160, 63);
+		frame.getContentPane().add(lblNewLabel_5);
+	}
+	
+	private void addinvoiceid() {
+		Connection con;
+		PreparedStatement ps;
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+			String str="select invoiceid from invoice where invoiceid=(select max(invoiceid) from invoice)";
+			ps=con.prepareStatement(str);
+			ResultSet rs=ps.executeQuery();
+			if(rs.next()){
+				int in=rs.getInt(1)+1;
+				invoice.setText(" "+in);
+			}
+			con.close();
+		}
+		catch(Exception es){}
+		
+	}
+
+	public void addcomboBox_1(){
+		Connection con;
+		PreparedStatement ps;
+		ResultSet rs;
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+			String str="select DISTINCT brandname from itembrand";
+			ps=con.prepareStatement(str);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				comboBox_1.addItem(rs.getString(1));
+			}
+			con.close();
+		}
+		catch(Exception es){
+			JOptionPane.showMessageDialog(frame, es.toString());
+		}
+	}
+	
+	public void additembrand(String brand){
+		Connection con;
+		PreparedStatement ps;
+		ResultSet rs;
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+			String str="select DISTINCT itemname from item where brandname=?";
+			ps=con.prepareStatement(str);
+			ps.setString(1, brand);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				comboBox.addItem(rs.getString(1));
+			}		
+			con.close();
+		}
+		catch(Exception es){}
+	}
+	public void sendSms(){
+		try {
+			// Construct data
+			String apiKey = "apikey=" + "3sE3CUIAcUQ-uHLlpFETH1Wwu0sS7SEP28XXGHUMko";
+			String message = "&message=" + "This is your message";
+			String sender = "&sender=" + "Home Tech Design";
+			String numbers = "&numbers=" + "919760493277";
+			
+			// Send data
+			HttpURLConnection conn = (HttpURLConnection) new URL("https://api.textlocal.in/send/?").openConnection();
+			String data = apiKey + numbers + message + sender;
+			conn.setDoOutput(true);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Length", Integer.toString(data.length()));
+			conn.getOutputStream().write(data.getBytes("UTF-8"));
+			final BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			final StringBuffer stringBuffer = new StringBuffer();
+			String line;
+			while ((line = rd.readLine()) != null) {
+				//stringBuffer.append(line);
+				JOptionPane.showMessageDialog(frame, "message "+line);
+			}
+			rd.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(frame,"Error SMS "+e);
+		}
+	}
+}

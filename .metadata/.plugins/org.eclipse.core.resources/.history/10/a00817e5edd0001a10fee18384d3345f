@@ -1,0 +1,187 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import java.awt.Font;
+import java.awt.Color;
+
+import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.ImageIcon;
+import javax.swing.Box;
+import javax.swing.border.LineBorder;
+import javax.swing.JButton;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import javax.swing.JPasswordField;
+
+import java.awt.Component;
+
+import javax.swing.border.BevelBorder;
+
+import java.util.*;
+import java.sql.*;
+import java.awt.Window.Type;
+import javax.swing.border.SoftBevelBorder;
+
+public class LoginPage {
+
+	public JFrame frmLoginPage;
+	private JTextField textField;
+	private JPasswordField passwordField;
+	public int i=0;
+
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					LoginPage window = new LoginPage();
+					window.frmLoginPage.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public LoginPage() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmLoginPage = new JFrame();
+		frmLoginPage.setTitle("Login Page");
+		frmLoginPage.setResizable(false);
+		frmLoginPage.getContentPane().setBackground(Color.GRAY);
+		frmLoginPage.setBounds(300, 120, 774, 481);
+		frmLoginPage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmLoginPage.getContentPane().setLayout(null);
+		
+		JLabel lblLoginPanel = new JLabel("Login Panel");
+		lblLoginPanel.setBounds(144, 124, 194, 50);
+		lblLoginPanel.setForeground(new Color(0, 0, 0));
+		lblLoginPanel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 35));
+		frmLoginPage.getContentPane().add(lblLoginPanel);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(132, 172, 206, 2);
+		frmLoginPage.getContentPane().add(separator);
+		
+		JLabel Username = new JLabel("Username :");
+		Username.setForeground(new Color(255, 215, 0));
+		Username.setBounds(102, 203, 101, 23);
+		Username.setFont(new Font("Tahoma", Font.BOLD, 16));
+		frmLoginPage.getContentPane().add(Username);
+		
+		JLabel lblPassword = new JLabel("Password :");
+		lblPassword.setForeground(new Color(255, 215, 0));
+		lblPassword.setBounds(102, 249, 101, 23);
+		lblPassword.setFont(new Font("Tahoma", Font.BOLD, 16));
+		frmLoginPage.getContentPane().add(lblPassword);
+		
+		textField = new JTextField();
+		textField.setBounds(213, 201, 158, 30);
+		frmLoginPage.getContentPane().add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setBounds(428, 33, 330, 408);
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Harshit Upraity\\Desktop\\fi.png"));
+		frmLoginPage.getContentPane().add(lblNewLabel);
+		
+		JButton btnNewButton = new JButton("LOGIN");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				connectdb(textField.getText(),passwordField.getText());
+			}
+		});
+		btnNewButton.setFont(new Font("Algerian", Font.PLAIN, 17));
+		btnNewButton.setBounds(102, 307, 113, 30);
+		frmLoginPage.getContentPane().add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Sign UP");
+		btnNewButton_1.setFont(new Font("Algerian", Font.PLAIN, 17));
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnNewButton_1.setBounds(236, 307, 113, 30);
+		frmLoginPage.getContentPane().add(btnNewButton_1);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(213, 247, 158, 30);
+		frmLoginPage.getContentPane().add(passwordField);
+		
+		JLabel lblBillingSoftwareFor = new JLabel("(Stock Management System)");
+		lblBillingSoftwareFor.setBackground(new Color(0, 0, 0));
+		lblBillingSoftwareFor.setForeground(new Color(255, 182, 193));
+		lblBillingSoftwareFor.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+		lblBillingSoftwareFor.setBounds(142, 50, 306, 50);
+		frmLoginPage.getContentPane().add(lblBillingSoftwareFor);
+		
+		Box horizontalBox = Box.createHorizontalBox();
+		horizontalBox.setBounds(64, 111, 349, 284);
+		horizontalBox.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		frmLoginPage.getContentPane().add(horizontalBox);
+		
+		Box horizontalBox_1 = Box.createHorizontalBox();
+		horizontalBox_1.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		horizontalBox_1.setBounds(102, 51, 374, 10);
+		frmLoginPage.getContentPane().add(horizontalBox_1);
+		
+		JLabel lblHomeTechDesign = new JLabel("HOME TECH DESIGN");
+		lblHomeTechDesign.setForeground(new Color(0, 0, 205));
+		lblHomeTechDesign.setFont(new Font("Algerian", Font.PLAIN, 48));
+		lblHomeTechDesign.setBounds(75, 11, 436, 39);
+		frmLoginPage.getContentPane().add(lblHomeTechDesign);
+	}
+	public void connectdb(String ID,String Pass){
+		Connection con;
+		PreparedStatement ps;
+		try{
+				Class.forName("com.mysql.jdbc.Driver");
+				con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+				String id=ID;
+				String pass=Pass;
+				String sql="select * from admin where userid=? and pasword=?";
+				 ps=con.prepareStatement(sql);
+				 ps.setString(1,id);
+				 ps.setString(2,pass);
+				 ResultSet rs=ps.executeQuery();
+				 if(rs.next())
+				 {
+					 JOptionPane.showMessageDialog(frmLoginPage,"LogIN Successfull...");
+					 StockPage window = new StockPage();
+					 window.frame.setVisible(true);
+					 frmLoginPage.hide();
+				 }
+				 else
+				 {
+					 i++;
+					 if(i==4){
+						 JOptionPane.showMessageDialog(frmLoginPage, "Forget your Password...\nTry again later...");
+						 frmLoginPage.hide();
+					 }
+					 else
+						 JOptionPane.showMessageDialog(frmLoginPage, "Something went wrong...LogIN Failed.!!!");
+				 }
+				 con.close();
+		}
+		catch(Exception e){
+				JOptionPane.showMessageDialog(frmLoginPage, "Database Connectivity Error....\nPlease Contact Developer..!!!");
+		}
+	}
+}
+
+

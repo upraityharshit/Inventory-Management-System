@@ -1,0 +1,91 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+
+
+public class demo {
+
+	public JFrame frame;
+
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					demo window = new demo();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+
+	public demo() {
+		initialize();
+	}
+
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 495, 331);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		boolean trail=false;
+		int a=25;
+		Calendar cal=Calendar.getInstance();
+		int dat=cal.get(Calendar.DATE);
+		int mon=cal.get(Calendar.MONTH);
+		int yr=cal.get(Calendar.YEAR);
+		//LocalDate td=LocalDate.now();
+		System.out.println(dat+"-"+mon+"-"+yr);
+		
+		
+		/*	if(td>=a){
+			JOptionPane.showConfirmDialog(frame,"Your Trial Pack Is Over...");
+			trail=true;
+		}
+				
+		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Connection con;
+				PreparedStatement ps;
+				try{
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					String id="1";
+					String pass="111";
+					String sql="select * from demo where id=? and pass=?";
+					 ps=con.prepareStatement(sql);
+					 ps.setString(1,id);
+					 ps.setString(2,pass);
+					 ResultSet rs=ps.executeQuery();
+					 if(rs.next())
+					 {
+							JOptionPane.showMessageDialog(frame,"LogIN Successfull...");
+						 	StockPage window = new StockPage();
+						 	window.frmStockControlPanel.setVisible(true);						 
+					 }
+					 else
+						 JOptionPane.showMessageDialog(frame,"LogIN Failed...");
+				}
+				catch(Exception e){}
+			}
+		});
+		frame.getContentPane().add(btnLogin, BorderLayout.CENTER);*/
+	}
+
+}

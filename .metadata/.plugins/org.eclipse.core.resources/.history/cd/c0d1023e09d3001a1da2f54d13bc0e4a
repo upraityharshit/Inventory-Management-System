@@ -1,0 +1,470 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+
+import java.awt.Color;
+
+import javax.swing.JLabel;
+
+import java.awt.Font;
+
+import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import javax.swing.JButton;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Calendar;
+
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.ImageIcon;
+
+
+public class itempage {
+
+	public JFrame frame;
+	String operation;
+	private JTextField textField;
+	JComboBox jcb,comboBox;
+	JSpinner spinner,spinner_1;
+	JTextArea textArea;
+	private JTextField textField_1;
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					itempage window = new itempage("update");
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public itempage(String str) {
+		operation=str;
+		initialize();
+	}
+
+	private void initialize() {
+		frame = new JFrame();
+		frame.setResizable(false);
+		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblItemaddDelete = new JLabel("Item (ADD /DELETE /UPDATE)");
+		lblItemaddDelete.setForeground(Color.BLUE);
+		lblItemaddDelete.setFont(new Font("Times New Roman", Font.PLAIN, 35));
+		lblItemaddDelete.setBounds(118, 25, 482, 46);
+		frame.getContentPane().add(lblItemaddDelete);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(106, 82, 515, 2);
+		frame.getContentPane().add(separator);
+		
+		JLabel lblItemName = new JLabel("Item Name ");
+		lblItemName.setForeground(Color.CYAN);
+		lblItemName.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblItemName.setBounds(90, 118, 175, 24);
+		frame.getContentPane().add(lblItemName);
+		
+		if(operation.equals("add")){
+			textField = new JTextField();
+			textField.setBounds(374, 105, 206, 37);
+			frame.getContentPane().add(textField);
+			textField.setColumns(10);
+
+		}
+		else{
+			jcb=new JComboBox();
+			jcb.setBounds(374, 105, 206, 37);
+			frame.getContentPane().add(jcb);
+			jcb.addItem("Select One");
+			additem();
+			
+			JButton btnViewData = new JButton("View Data");
+			btnViewData.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					showdata();
+				}
+			});
+			btnViewData.setBounds(610, 112, 95, 23);
+			frame.getContentPane().add(btnViewData);
+		}
+		
+		
+		JLabel lblItemBrand = new JLabel("Select Item Brand");
+		lblItemBrand.setForeground(Color.CYAN);
+		lblItemBrand.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblItemBrand.setBounds(91, 168, 174, 24);
+		frame.getContentPane().add(lblItemBrand);
+		
+		JLabel lblPriceperItem = new JLabel("Select Supplier");
+		lblPriceperItem.setForeground(Color.CYAN);
+		lblPriceperItem.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblPriceperItem.setBounds(90, 212, 175, 24);
+		frame.getContentPane().add(lblPriceperItem);
+		
+		JLabel lblQuantity = new JLabel("Quantity");
+		lblQuantity.setForeground(Color.CYAN);
+		lblQuantity.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblQuantity.setBounds(90, 258, 175, 24);
+		frame.getContentPane().add(lblQuantity);
+		
+		JLabel lblPriceperitem = new JLabel("Price (per item)");
+		lblPriceperitem.setForeground(Color.CYAN);
+		lblPriceperitem.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblPriceperitem.setBounds(90, 301, 175, 24);
+		frame.getContentPane().add(lblPriceperitem);
+		
+		comboBox = new JComboBox();
+		comboBox.setBounds(374, 153, 206, 37);
+		frame.getContentPane().add(comboBox);
+		comboBox.addItem("Select one");
+		addbrand();
+		addsupplier();
+		
+		spinner = new JSpinner();
+		spinner.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		spinner.setBounds(374, 247, 206, 35);
+		frame.getContentPane().add(spinner);
+		
+		spinner_1 = new JSpinner();
+		spinner_1.setModel(new SpinnerNumberModel(new Float(1), new Float(1), null, new Float(1)));
+		spinner_1.setBounds(374, 292, 206, 37);
+		frame.getContentPane().add(spinner_1);
+		
+		JLabel lblRemarkForThis = new JLabel("REMARK for this Item");
+		lblRemarkForThis.setForeground(Color.CYAN);
+		lblRemarkForThis.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblRemarkForThis.setBounds(90, 349, 175, 24);
+		frame.getContentPane().add(lblRemarkForThis);
+		
+		textArea = new JTextArea();
+		textArea.setBounds(374, 349, 206, 86);
+		frame.getContentPane().add(textArea);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setOrientation(SwingConstants.VERTICAL);
+		separator_1.setBounds(287, 105, 11, 330);
+		frame.getContentPane().add(separator_1);
+		
+		JButton btnAddNew = new JButton("Add New");
+		btnAddNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				itemcategorypage window = new itemcategorypage("add");
+				window.itemcatframe.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnAddNew.setBounds(610, 160, 89, 23);
+		frame.getContentPane().add(btnAddNew);
+		
+		JButton btnAddNew_1 = new JButton("Add New");
+		btnAddNew_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				supplierpage window = new supplierpage("add");
+				window.frame.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnAddNew_1.setBounds(610, 208, 89, 23);
+		frame.getContentPane().add(btnAddNew_1);
+		
+		JButton btnSave;
+		
+		if(operation.equals("add"))
+			btnSave = new JButton("SAVE");
+		else if(operation.equals("update"))
+			btnSave = new JButton("Update");
+		else
+			btnSave = new JButton("Delete");
+		
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Connection con;
+				PreparedStatement ps,ps1;
+				
+				Calendar cal=Calendar.getInstance();
+				int dat=cal.get(Calendar.DATE);
+				int mon=cal.get(Calendar.MONTH);
+				int yr=cal.get(Calendar.YEAR);
+				
+				try{
+						Class.forName("com.mysql.jdbc.Driver");
+						con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+					
+						if(operation.equals("add")){
+							String name=textField.getText();
+							String brand=comboBox.getSelectedItem().toString();
+							String supplier=textField_1.getText();;
+							int quantity=(int)spinner.getValue();
+							float price=(float)spinner_1.getValue();
+							String remark=textArea.getText();
+							
+							if(textField.getText().length()==0 || comboBox.getSelectedItem().toString().equalsIgnoreCase("select one") || 
+									textField_1.getText().length()==0){
+								JOptionPane.showMessageDialog(frame, "Please Fill All Entry...");
+							}
+							else{
+								String str="select itemname,brandname from item where itemname=? and brandname=?";
+								ps=con.prepareStatement(str);
+								ps.setString(1,name);
+								ps.setString(2, brand);
+								ResultSet rs=ps.executeQuery();
+								if(!rs.next()){
+									String sql="insert into item values(itemid,?,?,?,?,?,?)";
+									ps=con.prepareStatement(sql);
+									ps.setString(1,brand);
+									ps.setString(2,supplier);
+									ps.setString(3,name);
+									ps.setFloat(4,price);
+									ps.setInt(5,quantity);
+									ps.setString(6,remark);
+									ps.executeUpdate();
+									JOptionPane.showMessageDialog(frame, "Data Saved");
+									
+									//Purchase History Table Saved Data
+									
+									String sql1="insert into itempurchase values(itempurid,?,?,?,?,?,?,?,?)";
+									ps1=con.prepareStatement(sql1);
+									ps1.setString(1,brand);
+									ps1.setString(2,supplier);
+									ps1.setString(3,name);
+									ps1.setFloat(4,price);
+									ps1.setInt(5,quantity);
+									ps1.setString(6,dat+"-"+mon+"-"+yr);
+									ps1.setString(7,"Insert");
+									ps1.setString(8,remark);
+									ps1.executeUpdate();
+									
+									textField.setText("");
+									textArea.setText("");
+									comboBox.setSelectedIndex(0);
+									textField_1.setText("");
+									spinner.setValue(1);
+									spinner_1.setValue(1);
+								}
+								else{
+									JOptionPane.showMessageDialog(frame, "This Item and Brand Is already exists\n\nTry another Brand");
+								}
+							}
+						}
+						else if(operation.equals("update")){
+							
+							if(jcb.getSelectedItem().toString().equalsIgnoreCase("Select one") || comboBox.getSelectedItem().toString().equalsIgnoreCase("select one") || 
+									textField_1.getText().length()==0)
+							{
+								JOptionPane.showMessageDialog(frame, "Please Fill All Entry...");
+							}
+							else{
+								String name=jcb.getSelectedItem().toString();
+								String brand=comboBox.getSelectedItem().toString();
+								String supplier=textField_1.getText();
+								int quantity=(int)spinner.getValue();
+								float price=(float)spinner_1.getValue();
+								String remark=textArea.getText();
+								
+									String str="update item set itemprice=?, itemquantity=itemquantity+?,itemsupplier=?,Remark=? where itemname=? and brandname=?";
+									ps=con.prepareStatement(str);
+									ps.setFloat(1,price);
+									ps.setInt(2,quantity);
+									ps.setString(3,supplier);
+									ps.setString(4,remark);
+									ps.setString(5,name);
+									ps.setString(6,brand);
+									int p=ps.executeUpdate();
+									JOptionPane.showMessageDialog(frame, "Data Updated...");
+									
+									//	Purchase History Table Saved Data
+									
+									String sql1="insert into itempurchase values(itempurid,?,?,?,?,?,?,?,?)";
+									ps1=con.prepareStatement(sql1);
+									ps1.setString(1,brand);
+									ps1.setString(2,supplier);
+									ps1.setString(3,name);
+									ps1.setFloat(4,price);
+									ps1.setInt(5,quantity);
+									ps1.setString(6,dat+"-"+mon+"-"+yr);
+									ps1.setString(7,"Update");
+									ps1.setString(8,remark);
+									ps1.executeUpdate();
+									
+									
+									textArea.setText("");
+									comboBox.setSelectedIndex(0);
+									textField_1.setText("");
+									spinner.setValue(1);
+									spinner_1.setValue(1);
+							}
+						}
+						else if(operation.equals("delete")){
+							if(!jcb.getSelectedItem().toString().equalsIgnoreCase("Select one"))
+							{
+								String itemid=jcb.getSelectedItem().toString();
+								String brandname=comboBox.getSelectedItem().toString();
+								String supname=textField_1.getText();
+								String str="delete from item where itemname=? and brandname=? and itemsupplier=?";
+								ps=con.prepareStatement(str);
+								ps.setString(1,itemid);
+								ps.setString(2,brandname);
+								ps.setString(3,supname);
+								int p=ps.executeUpdate();
+								JOptionPane.showMessageDialog(frame, "Data Deleted...");
+								
+//								Purchase History Table Saved Data
+								
+								String sql1="insert into itempurchase values(itempurid,?,?,?,?,?,?,?,?)";
+								ps1=con.prepareStatement(sql1);
+								ps1.setString(1,"Null");
+								ps1.setString(2,"Null");
+								ps1.setString(3,"Null");
+								ps1.setFloat(4,0);
+								ps1.setInt(5,0);
+								ps1.setString(6,dat+"-"+mon+"-"+yr);
+								ps1.setString(7,"Delete");
+								ps1.setString(8,"Null");
+								ps1.executeUpdate();
+								
+								jcb.removeItem(itemid);
+							}
+							else{
+								JOptionPane.showMessageDialog(frame, "You are not Select any Item Name");
+							}
+						}
+						con.close();
+					}	
+				catch(Exception es){
+						JOptionPane.showMessageDialog(frame, "Database Connectivity Error....\nPlease Contact Developer..!!!\n"+es);
+				}
+			}
+		});
+		btnSave.setFont(new Font("Algerian", Font.PLAIN, 20));
+		btnSave.setBounds(136, 473, 164, 37);
+		frame.getContentPane().add(btnSave);
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.dispose();
+			}
+		});
+		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnCancel.setBounds(363, 474, 164, 37);
+		frame.getContentPane().add(btnCancel);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(374, 201, 206, 37);
+		frame.getContentPane().add(textField_1);
+		textField_1.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setIcon(new ImageIcon(itempage.class.getResource("/img/blur-blurred-highway-1240.jpg")));
+		lblNewLabel.setBounds(0, 0, 760, 594);
+		frame.getContentPane().add(lblNewLabel);
+		frame.setBounds(100, 50, 766, 623);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+	}
+	public void addbrand(){
+		try{
+			Connection con;
+			PreparedStatement ps;
+			ResultSet rs;
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+			if(operation.equals("add")){
+				String str="select DISTINCT brandname from itembrand";
+				ps=con.prepareStatement(str);
+				rs=ps.executeQuery();
+				while(rs.next()){
+					comboBox.addItem(rs.getString(1));
+				}
+			}
+			else{
+				String str="select * from item";
+				ps=con.prepareStatement(str);
+				rs=ps.executeQuery();
+				while(rs.next()){
+					comboBox.addItem(rs.getString(2));
+				}
+			}
+			con.close();
+		}
+		catch(Exception e){}
+	}
+	public void additem(){
+		try{
+			Connection con;
+			PreparedStatement ps;
+			ResultSet rs;
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+			
+			String str="select DISTINCT itemname from item";
+			ps=con.prepareStatement(str);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				jcb.addItem(rs.getString(1));
+			}
+			con.close();
+		}
+		catch(Exception e){}
+	}
+	public void addsupplier(){
+		try{
+			Connection con;
+			PreparedStatement ps;
+			ResultSet rs;
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+			String str="select * from supplier";
+			ps=con.prepareStatement(str);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				//comboBox_1.addItem(rs.getString(2));
+			}
+			con.close();
+		}
+		catch(Exception e){}
+	}
+	public void showdata(){
+		try{
+			Connection con;
+			PreparedStatement ps;
+			ResultSet rs;
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3307/test","root","root");
+			if(jcb.getSelectedItem().toString().equalsIgnoreCase("select one") || comboBox.getSelectedItem().toString().equalsIgnoreCase("select one")){
+				JOptionPane.showMessageDialog(frame, "Please Select Both Item And Item Brand");
+			}
+			else{
+				String str="select * from item where itemname=? and brandname=?";
+				ps=con.prepareStatement(str);
+				ps.setString(1, jcb.getSelectedItem().toString());
+				ps.setString(2, comboBox.getSelectedItem().toString());
+				rs=ps.executeQuery();
+				if(rs.next()){
+					textArea.setText(rs.getString(7));
+					comboBox.setSelectedItem(rs.getString(2));
+					textField_1.setText(rs.getString(3));
+					spinner.setValue(rs.getInt(6));
+					spinner_1.setValue(rs.getFloat(5));
+				}
+			}
+			con.close();
+		}
+		catch(Exception e){}
+	}
+}
